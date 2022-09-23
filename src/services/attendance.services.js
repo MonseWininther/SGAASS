@@ -1,5 +1,4 @@
-import { async } from '@firebase/util'
-import { collection, getDocs, Timestamp, addDoc, getDoc, updateDoc, doc } from 'firebase/firestore'
+import { collection, getDocs, Timestamp, addDoc, getDoc, updateDoc, doc, setDoc, deleteDoc } from 'firebase/firestore'
 import { db } from '../firebase-config'
 
 
@@ -13,11 +12,21 @@ const attendanceCollectionReference = (idControl) => collection(db, `students/${
 
 class AttendanceDataService {
 
-    registerStudent = (newStudent) => {
-        //Crear Documento con idControl
-        return addDoc(studentDocumentReference, newStudent);
-        //Con atributos  fristName, lastName
-        
+    registerStudent = async (newStudent) => {
+       try {
+         //Crear Documento con idControl
+         const result=await setDoc(doc(db,'students',''+newStudent.idControl),newStudent)
+         return result
+       } catch (error) {
+        console.log("Error")
+        console.log(error)
+       }
+    }
+
+    updateStudents = async (id, updatedStudent) =>{
+        const studentDoc = doc (db, "students", id)
+        const result = await updateDoc (studentDoc,updatedStudent)
+        console.log(result)
     }
 
     getStudents = async() => {
@@ -25,9 +34,10 @@ class AttendanceDataService {
         const docs = ref.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         return docs
     }
-    deleteStudents = () => {
-
-
+    deleteStudents = async (id) => {
+        const studentDoc = doc(db,"students",id)
+        const result = await deleteDoc(studentDoc)
+        console.log(result)
     }
     //
     checkIn = async (idControl) => {
@@ -78,6 +88,7 @@ class AttendanceDataService {
             const checkOut = new Timestamp(seconds, nanoseconds)
             //Obtener duracion restando checkOut con checkIn
             const duration = checkOut.seconds - checkIn.seconds
+            console.log('duration',duration)
             const transform = (duration / 60) / 60
             //Crear objeto nuevo objecto de asitencia
             const result = { ...attendaceDoc, checkOut, duration: transform }
@@ -86,7 +97,15 @@ class AttendanceDataService {
             const attendaceResult = await updateDoc(attendanceDocRef, result)
             console.log(attendaceResult)
 
-            const udatedStuden = { ...student, idCurrentAttendances: '' }
+            const allAttendances= await this.getAllAttendances(idControl)
+            console.log('todo',allAttendances)
+            const sum= allAttendances.reduce(
+                (accumulator, currentValue) => accumulator.duration + currentValue.duration
+              );
+
+              console.log('sum',sum)
+
+            const udatedStuden = { ...student, idCurrentAttendances: '',duration:sum}
             const studentResult = await updateDoc(studentDocRef, udatedStuden)
             console.log(studentResult)
 
@@ -97,7 +116,8 @@ class AttendanceDataService {
     getAllAttendances = async (idControl) => {
         const ref = await getDocs(attendanceCollectionReference(idControl))
         const docs = ref.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        console.log(docs)
+        console.log('docs',docs)
+        return docs
     }
 }
 export default new AttendanceDataService()
