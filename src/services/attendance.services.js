@@ -89,7 +89,7 @@ class AttendanceDataService {
             //Obtener duracion restando checkOut con checkIn
             const duration = checkOut.seconds - checkIn.seconds
             console.log('duration',duration)
-            const transform = (duration / 60) / 60
+            const transform = duration
             //Crear objeto nuevo objecto de asitencia
             const result = { ...attendaceDoc, checkOut, duration: transform }
             //Actualizar Docuemtno en Firesbase 
@@ -99,12 +99,11 @@ class AttendanceDataService {
 
             const allAttendances= await this.getAllAttendances(idControl)
             console.log('todo',allAttendances)
-            const sum= allAttendances.reduce(
-                (accumulator, currentValue) => accumulator.duration + currentValue.duration
-              );
-
+            const durations=allAttendances.map((x)=>x.duration)
+            console.log('Gato',durations)
+            const sum= durations.reduce(
+                (x,y ) => x + y);
               console.log('sum',sum)
-
             const udatedStuden = { ...student, idCurrentAttendances: '',duration:sum}
             const studentResult = await updateDoc(studentDocRef, udatedStuden)
             console.log(studentResult)

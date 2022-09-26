@@ -1,18 +1,28 @@
+import { QRCodeSVG } from "qrcode.react"
 import { useState, useEffect } from "react"
 import { Button, Form, FormControl, FormGroup, InputGroup } from "react-bootstrap"
+import attendanceServices from "../services/attendance.services"
 
 
-const studentLogOut = () => {
+const StudentLogOut = () => {
 
     const [idControl, setIdControl] = useState("")
     const [firstName, setFirstName] = useState("")
-    const [hour, setHour] = useState(Date.now)
+    const [date, setDate] = useState(Date.now)
 
+    const sendCheckOut =()=>{
+        const result = attendanceServices.checkOut(idControl)
+        console.log(result)
+        refreshPage()
+    }
+    const refreshPage = () => {
+        window.location.reload(false);
+    }
     useEffect(() => {
 
     }, [])
     return (
-        <>
+        <div className="App-header">
             <> <h1>HASTA LUEGO!!!!📤</h1>
                 <h3>Ingresa solo tu numero de control</h3>
                 <Form>
@@ -27,33 +37,34 @@ const studentLogOut = () => {
                         </InputGroup>
 
                         <InputGroup>
-                            <InputGroup.Text></InputGroup.Text>
-                            <FormControl type="text"
+                            <InputGroup.Text>Nombre</InputGroup.Text>
+                            <FormControl
+                                type="text"
                                 placeholder="¿Tu nombre es?"
                                 value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}>
-                            </FormControl>
+                                disabled
+                            ></FormControl>
                         </InputGroup>
 
-                        <InputGroup>
-                            <InputGroup.Text> Hora: </InputGroup.Text>
-                            <FormControl type="Date.Now"
-                                placeholder=""
-                                value={hour}
-                                onChange={(e) => setHour(e.target.value)}>
-                            </FormControl>
-                        </InputGroup>
+                      
+                        <label>{date}</label>
+                     
+                       
+
+                        <QRCodeSVG value={date}/>
+
                         <div className="d-grid gap-2">
-                            <Button variant="primary" type="Submit">
+                            <Button variant="primary" onClick={(e)=> sendCheckOut()}>
                                 Registrar
                             </Button>
                         </div>
 
+
                     </FormGroup>
                 </Form>
             </>
-        </>
+        </div>
     )
 
 }
-export default studentLogOut
+export default StudentLogOut
