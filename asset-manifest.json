@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/SGAASS/static/css/main.ff0634ab.css",
-    "main.js": "/SGAASS/static/js/main.65120398.js",
-    "static/js/787.026fcdfa.chunk.js": "/SGAASS/static/js/787.026fcdfa.chunk.js",
-    "index.html": "/SGAASS/index.html",
-    "main.ff0634ab.css.map": "/SGAASS/static/css/main.ff0634ab.css.map",
-    "main.65120398.js.map": "/SGAASS/static/js/main.65120398.js.map",
-    "787.026fcdfa.chunk.js.map": "/SGAASS/static/js/787.026fcdfa.chunk.js.map"
+    "main.css": "/static/css/main.ff0634ab.css",
+    "main.js": "/static/js/main.bee0081c.js",
+    "static/js/787.026fcdfa.chunk.js": "/static/js/787.026fcdfa.chunk.js",
+    "index.html": "/index.html",
+    "main.ff0634ab.css.map": "/static/css/main.ff0634ab.css.map",
+    "main.bee0081c.js.map": "/static/js/main.bee0081c.js.map",
+    "787.026fcdfa.chunk.js.map": "/static/js/787.026fcdfa.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ff0634ab.css",
-    "static/js/main.65120398.js"
+    "static/js/main.bee0081c.js"
   ]
 }
